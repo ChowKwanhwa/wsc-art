@@ -3,17 +3,36 @@
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, Globe } from "lucide-react";
+import { useLanguage } from "./language-provider";
 
 export function HeroSection() {
     const [mounted, setMounted] = useState(false);
+    const { language, setLanguage, t } = useLanguage();
 
     useEffect(() => {
         setMounted(true);
     }, []);
 
+    const toggleLanguage = () => {
+        setLanguage(language === 'zh' ? 'en' : 'zh');
+    };
+
     return (
         <section className="relative h-screen w-full overflow-hidden flex items-center justify-center bg-paper-white">
+            {/* Language Toggle */}
+            <div className="absolute top-6 right-6 z-50">
+                <button
+                    onClick={toggleLanguage}
+                    className="flex items-center gap-2 px-4 py-2 bg-white/80 backdrop-blur-sm border border-neutral-200 rounded-full hover:bg-white hover:shadow-md transition-all duration-300 group"
+                >
+                    <Globe className="w-4 h-4 text-neutral-600 group-hover:text-seal-red transition-colors" />
+                    <span className="font-serif text-sm text-neutral-800">
+                        {language === 'zh' ? 'EN' : '中文'}
+                    </span>
+                </button>
+            </div>
+
             {/* Background Ink Effect (Placeholder for now, could be an image or canvas) */}
             {/* Background Ink Effect */}
             <div className="absolute inset-0 pointer-events-none select-none">
@@ -36,11 +55,11 @@ export function HeroSection() {
                     className="flex flex-col items-center"
                 >
                     {/* Vertical Title using Calligraphy Font */}
-                    <h1 className="text-6xl md:text-8xl lg:text-9xl font-calligraphy text-ink-black writing-vertical-rl tracking-widest leading-loose">
-                        诗书合璧
+                    <h1 className={`text-6xl md:text-8xl lg:text-9xl font-calligraphy text-ink-black tracking-widest leading-loose ${language === 'zh' ? 'writing-vertical-rl' : ''}`}>
+                        {t.hero.title}
                     </h1>
                     <h2 className="mt-8 text-2xl md:text-3xl font-serif text-ink-black/80 tracking-[0.2em] uppercase">
-                        Wsc Art
+                        {t.hero.subtitle}
                     </h2>
                 </motion.div>
 
@@ -50,7 +69,7 @@ export function HeroSection() {
                     transition={{ delay: 1, duration: 1 }}
                 >
                     <p className="font-serif text-lg text-gray-600">
-                        巫师传先生的艺术世界
+                        {t.hero.description}
                     </p>
                 </motion.div>
             </div>

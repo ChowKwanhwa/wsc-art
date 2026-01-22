@@ -1,25 +1,21 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { useLanguage } from "./language-provider";
 
 export function TimelineSection() {
-    const events = [
-        { year: "1945", title: "生于广东惠阳", desc: "开启艺术人生" },
-        { year: "1980s", title: "创立书协", desc: "参与创建深圳市书法家协会" },
-        { year: "2014", title: "名家邀请展", desc: "作品参展“投资时报——秋季·当代书画名家邀请展”" },
-        { year: "2023", title: "跨界交流", desc: "出席电影文化活动，拓展艺术边界" },
-    ];
+    const { t } = useLanguage();
 
     return (
         <section className="w-full py-24 px-6 bg-paper-white relative overflow-hidden">
-            <h2 className="text-center text-3xl font-calligraphy mb-16">艺术历程</h2>
+            <h2 className="text-center text-3xl font-calligraphy mb-16">{t.timeline.title}</h2>
 
             <div className="max-w-4xl mx-auto relative">
                 {/* Center Line */}
                 <div className="absolute left-1/2 top-0 bottom-0 w-px bg-neutral-300 -translate-x-1/2" />
 
                 <div className="space-y-12">
-                    {events.map((evt, idx) => (
+                    {t.timeline.events.map((evt, idx) => (
                         <motion.div
                             key={idx}
                             className={`flex items-center gap-8 ${idx % 2 === 0 ? "flex-row" : "flex-row-reverse"}`}

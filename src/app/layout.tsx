@@ -39,6 +39,9 @@ export const metadata: Metadata = {
   },
 };
 
+import { LanguageProvider } from "@/components/language-provider";
+// ... imports
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -49,7 +52,9 @@ export default function RootLayout({
       <body
         className={`${notoSerifSC.variable} ${maShanZheng.variable} antialiased bg-paper-white text-ink-black`}
       >
-        {children}
+        <LanguageProvider>
+          {children}
+        </LanguageProvider>
       </body>
     </html>
   );

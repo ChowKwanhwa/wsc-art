@@ -3,8 +3,10 @@
 import { motion, useScroll, useTransform } from "framer-motion";
 import Image from "next/image";
 import { useRef } from "react";
+import { useLanguage } from "./language-provider";
 
 export function FeaturedSection() {
+    const { t } = useLanguage();
     const containerRef = useRef<HTMLDivElement>(null);
     const { scrollYProgress } = useScroll({
         target: containerRef,
@@ -26,7 +28,7 @@ export function FeaturedSection() {
                 >
                     <Image
                         src="/artwork_placeholder_landscape.png"
-                        alt="山水巨作"
+                        alt={t.featured.title}
                         fill
                         className="object-cover"
                         priority
@@ -35,7 +37,7 @@ export function FeaturedSection() {
                     {/* Interactive Hint */}
                     <div className="absolute bottom-4 right-4 bg-black/50 text-white px-3 py-1 text-xs rounded-full backdrop-blur-sm flex items-center gap-2">
                         <span className="w-2 h-2 bg-seal-red rounded-full animate-pulse" />
-                        沉浸式赏析
+                        {t.featured.hint}
                     </div>
                 </motion.div>
 
@@ -44,11 +46,9 @@ export function FeaturedSection() {
                     style={{ opacity }}
                     className="absolute bottom-10 left-10 md:bottom-20 md:left-20 max-w-md bg-white/90 p-8 shadow-lg backdrop-blur border-l-4 border-seal-red"
                 >
-                    <h3 className="text-2xl font-calligraphy text-ink-black mb-2">镇馆之宝 · 云山苍茫</h3>
+                    <h3 className="text-2xl font-calligraphy text-ink-black mb-2">{t.featured.title}</h3>
                     <p className="font-serif text-sm leading-relaxed text-neutral-600">
-                        此作融汇宋元山水之气韵，笔墨苍润，气势磅礴。
-                        巫师传先生以“诗心”入画，运笔如行云流水，
-                        山峦叠嶂间似有诗意流淌。
+                        {t.featured.desc}
                     </p>
                 </motion.div>
             </div>

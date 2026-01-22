@@ -1,13 +1,10 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { useLanguage } from "./language-provider";
 
 export function PhilosophySection() {
-    const principles = [
-        { title: "诗心为魂", desc: "笔墨起于诗心，源于墨韵" },
-        { title: "书臻神功", desc: "书风清雅俊秀，具二王风韵" },
-        { title: "诗书合璧", desc: "读诗可见笔墨灵动，赏字可悟诗词深邃" },
-    ];
+    const { t } = useLanguage();
 
     return (
         <section className="relative w-full py-32 bg-ink-black text-paper-white overflow-hidden">
@@ -26,18 +23,17 @@ export function PhilosophySection() {
                         transition={{ duration: 1 }}
                     >
                         <h2 className="text-4xl md:text-5xl font-calligraphy text-paper-white">
-                            艺术理念
+                            {t.philosophy.title}
                         </h2>
                         <div className="w-16 h-1 bg-seal-red" />
                         <p className="text-lg font-serif text-white/70 leading-relaxed">
-                            巫师传先生的书法，自始至终贯穿着“诗心为魂”的底色。
-                            在遍汲众家之长后自成一体，挥毫落纸间，尽显非凡气度。
+                            {t.philosophy.desc}
                         </p>
                     </motion.div>
 
                     {/* Vertical Scroll/Principles */}
                     <div className="flex flex-row-reverse gap-8 md:gap-16">
-                        {principles.map((item, index) => (
+                        {t.philosophy.principles.map((item, index) => (
                             <motion.div
                                 key={index}
                                 className="flex flex-col items-center gap-6 writing-vertical-rl"
@@ -54,7 +50,7 @@ export function PhilosophySection() {
                                 </p>
                                 {/* Seal */}
                                 <div className="w-8 h-8 border border-seal-red/50 rounded flex items-center justify-center text-seal-red/80 text-xs mt-4">
-                                    {index === 0 ? "心" : index === 1 ? "神" : "合"}
+                                    {item.seal}
                                 </div>
                             </motion.div>
                         ))}
