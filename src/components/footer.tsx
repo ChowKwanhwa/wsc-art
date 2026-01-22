@@ -1,3 +1,5 @@
+"use client";
+
 import { useLanguage } from "./language-provider";
 
 export function Footer() {
