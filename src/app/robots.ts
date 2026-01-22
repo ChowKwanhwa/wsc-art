@@ -8,6 +8,6 @@ export default function robots(): MetadataRoute.Robots {
             userAgent: '*',
             allow: '/',
         },
-        sitemap: 'https://wsc-art.vercel.app/sitemap.xml', // TODO: Update with actual domain
+        sitemap: 'https://wsc.art/sitemap.xml',
     }
 }

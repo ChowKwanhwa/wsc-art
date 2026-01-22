@@ -3,7 +3,8 @@ import { MetadataRoute } from 'next'
 export const dynamic = 'force-static'
 
 export default function sitemap(): MetadataRoute.Sitemap {
-    const baseUrl = 'https://wsc-art.vercel.app' // TODO: Update with actual domain
+    const baseUrl = 'https://wsc.art'
+
 
     return [
         {

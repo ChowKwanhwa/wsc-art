@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import Image from "next/image";
 import { useEffect, useState } from "react";
 import { ChevronDown } from "lucide-react";
 
@@ -14,9 +15,17 @@ export function HeroSection() {
     return (
         <section className="relative h-screen w-full overflow-hidden flex items-center justify-center bg-paper-white">
             {/* Background Ink Effect (Placeholder for now, could be an image or canvas) */}
-            <div className="absolute inset-0 pointer-events-none opacity-10">
-                {/* Abstract Ink Swirl SVG or Image */}
-                <div className="absolute top-0 right-0 w-full h-full bg-[radial-gradient(circle_at_top_right,_var(--color-ink-black),_transparent_70%)] blur-3xl opacity-20" />
+            {/* Background Ink Effect */}
+            <div className="absolute inset-0 pointer-events-none select-none">
+                <Image
+                    src="/hero_background_ink.png"
+                    alt="Ink Wash Background"
+                    fill
+                    className="object-cover opacity-60"
+                    priority
+                />
+                {/* Subtle gradient overlay to ensure text readability */}
+                <div className="absolute inset-0 bg-gradient-to-b from-paper-white/30 via-transparent to-paper-white/80" />
             </div>
 
             <div className="z-10 text-center space-y-8 p-4">

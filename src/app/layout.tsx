@@ -15,6 +15,7 @@ const maShanZheng = Ma_Shan_Zheng({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://wsc.art'),
   title: "Wsc Art | 巫师传 - 诗书双绝，翰墨大家",
   description: "巫师传（字山竹），中国书坛“诗书双绝”大家，深圳市书法家协会创始人之一。网站展示其行草书法、国画作品及诗词创作。诗心铸魂，墨韵千秋。",
   keywords: ["巫师传", "书法", "国画", "诗书合璧", "深圳书协", "行草", "Wsc Art", "Chinese Calligraphy", "艺术收藏"],
