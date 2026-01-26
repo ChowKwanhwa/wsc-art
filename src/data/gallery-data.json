@@ -243,6 +243,20 @@
   ],
   "life": [
     {
+      "id": "众人观赏书法长卷",
+      "category": "life",
+      "title": "众人观赏书法长卷",
+      "imagePath": "/生活/众人观赏书法长卷.jpg",
+      "description": ""
+    },
+    {
+      "id": "华辉行题字合影",
+      "category": "life",
+      "title": "华辉行题字合影",
+      "imagePath": "/生活/华辉行题字合影.jpg",
+      "description": ""
+    },
+    {
       "id": "叶亚来主题文化展示馆牌匾",
       "category": "life",
       "title": "叶亚来主题文化展示馆牌匾",
@@ -341,6 +355,13 @@
       "description": ""
     },
     {
+      "id": "巫师传评改诗词",
+      "category": "life",
+      "title": "巫师传评改诗词",
+      "imagePath": "/生活/巫师传评改诗词.jpg",
+      "description": ""
+    },
+    {
       "id": "文明朝阳牌匾",
       "category": "life",
       "title": "文明朝阳牌匾",
@@ -352,6 +373,13 @@
       "category": "life",
       "title": "福海饭店牌匾",
       "imagePath": "/生活/福海饭店牌匾.jpg",
+      "description": ""
+    },
+    {
+      "id": "鉴赏书法长卷细节",
+      "category": "life",
+      "title": "鉴赏书法长卷细节",
+      "imagePath": "/生活/鉴赏书法长卷细节.jpg",
       "description": ""
     }
   ]
