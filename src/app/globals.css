@@ -5,12 +5,36 @@
   --color-paper-white: #fdfbf7;
   --color-seal-red: #c0392b;
   --color-gold-accent: #d4af37;
-  
+
   --font-serif: var(--font-noto-serif-sc), serif;
   --font-calligraphy: var(--font-ma-shan-zheng), cursive;
 }
 
-/* Custom Utilities for Ink Effects might go here later */
+/* Custom Utilities */
+@layer utilities {
+  .writing-vertical-rl {
+    writing-mode: vertical-rl;
+  }
+}
+
+/* Custom Animations */
+@keyframes pulse-slow {
+
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+
+  50% {
+    transform: scale(1.02);
+    opacity: 0.95;
+  }
+}
+
+.animate-pulse-slow {
+  animation: pulse-slow 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
 
 body {
   background-color: var(--color-paper-white);
@@ -22,13 +46,16 @@ body {
 ::-webkit-scrollbar {
   width: 8px;
 }
+
 ::-webkit-scrollbar-track {
   background: transparent;
 }
+
 ::-webkit-scrollbar-thumb {
   background: #ccc;
   border-radius: 4px;
 }
+
 ::-webkit-scrollbar-thumb:hover {
   background: #aaa;
 }

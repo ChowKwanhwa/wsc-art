@@ -37,14 +37,28 @@ export function HeroSection() {
             {/* Background Ink Effect */}
             <div className="absolute inset-0 pointer-events-none select-none">
                 <Image
-                    src="/hero_background_ink.png"
-                    alt="Ink Wash Background"
+                    src="/hero-bg-building.jpeg"
+                    alt="Building Background"
                     fill
-                    className="object-cover opacity-60"
+                    className="object-cover opacity-80"
                     priority
                 />
                 {/* Subtle gradient overlay to ensure text readability */}
                 <div className="absolute inset-0 bg-gradient-to-b from-paper-white/30 via-transparent to-paper-white/80" />
+
+                {/* Image Label */}
+                <motion.div
+                    className="absolute bottom-32 right-8 md:bottom-1/3 md:right-16 z-20"
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 1.2, duration: 0.8 }}
+                >
+                    <div className="bg-seal-red/90 backdrop-blur-sm px-4 py-2 rounded-r-none rounded-l-xl shadow-lg border-y border-l border-white/20 animate-pulse-slow hover:bg-seal-red transition-colors">
+                        <p className="text-sm font-serif text-white tracking-wide shadow-sm">
+                            {t.hero.imageLabel}
+                        </p>
+                    </div>
+                </motion.div>
             </div>
 
             <div className="z-10 text-center space-y-8 p-4">

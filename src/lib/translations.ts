@@ -6,6 +6,7 @@ export const translations = {
             title: "诗书合璧",
             subtitle: "Wsc Art",
             description: "巫师传先生的艺术世界",
+            imageLabel: "新建成的巫师传吉庐艺术馆",
         },
         intro: {
             bioTitle: "艺术家简介",
@@ -70,6 +71,7 @@ export const translations = {
             title: "Poetry & Ink",
             subtitle: "Wsc Art",
             description: "The Artistic World of Master Wu Shichuan",
+            imageLabel: "Newly Built Wushi Chuan Jilu Art Museum",
         },
         intro: {
             bioTitle: "Artist Biography",
