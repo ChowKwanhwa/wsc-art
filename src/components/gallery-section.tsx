@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { X, ChevronLeft, ChevronRight, ZoomIn } from "lucide-react";
 import galleryDataRaw from "@/data/gallery-data.json";
 import { useLanguage } from "./language-provider";
+import ReactMarkdown from "react-markdown";
 
 // Type definition based on JSON structure
 interface GalleryItem {
@@ -68,8 +69,8 @@ export function GallerySection() {
                             key={cat.id}
                             onClick={() => setActiveCategory(cat.id)}
                             className={`px-6 py-2 rounded-full text-sm md:text-base font-serif transition-all duration-300 border ${activeCategory === cat.id
-                                    ? "bg-ink-black text-white border-ink-black shadow-md transform scale-105"
-                                    : "bg-transparent text-neutral-600 border-neutral-300 hover:border-ink-black/50"
+                                ? "bg-ink-black text-white border-ink-black shadow-md transform scale-105"
+                                : "bg-transparent text-neutral-600 border-neutral-300 hover:border-ink-black/50"
                                 }`}
                         >
                             {/* We need to ensure these keys exist in translations, defaulting to English labels for now if missing */}
@@ -117,8 +118,8 @@ export function GallerySection() {
                                 exit={{ opacity: 0, scale: 0.9 }}
                                 transition={{ duration: 0.3 }}
                                 className={`relative flex-none snap-center group/card cursor-pointer overflow-hidden rounded-lg shadow-sm hover:shadow-xl transition-all duration-300 border border-neutral-100 bg-white ${item.category === 'calligraphy'
-                                        ? "w-[280px] h-[500px]" // Taller for calligraphy
-                                        : "w-[360px] h-[260px]" // Wider for landscapes/photos
+                                    ? "w-[280px] h-[500px]" // Taller for calligraphy
+                                    : "w-[360px] h-[260px]" // Wider for landscapes/photos
                                     }`}
                                 onClick={() => setSelectedImage(item)}
                             >
@@ -196,10 +197,10 @@ export function GallerySection() {
                                             {selectedImage.title}
                                         </h3>
                                         {selectedImage.category === 'calligraphy' ? (
-                                            <div className="prose prose-stone prose-sm max-w-none">
-                                                <div className="whitespace-pre-line font-serif text-neutral-600 leading-relaxed font-light">
+                                            <div className="prose prose-stone prose-sm max-w-none font-serif text-neutral-600 leading-relaxed font-light">
+                                                <ReactMarkdown>
                                                     {selectedImage.description}
-                                                </div>
+                                                </ReactMarkdown>
                                             </div>
                                         ) : (
                                             <p className="font-serif text-neutral-600 leading-relaxed">
