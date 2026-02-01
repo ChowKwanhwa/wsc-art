@@ -1,223 +1,465 @@
-"use client";
+'use client';
 
-import { useState, useRef } from "react";
-import Image from "next/image";
-import { motion, AnimatePresence } from "framer-motion";
-import { X, ChevronLeft, ChevronRight, ZoomIn } from "lucide-react";
-import galleryDataRaw from "@/data/gallery-data.json";
-import { useLanguage } from "./language-provider";
-import ReactMarkdown from "react-markdown";
+import { motion, AnimatePresence } from 'framer-motion';
+import Image from 'next/image';
+import { useState, useEffect, useRef, useMemo } from 'react';
+import { Search, Loader2, ChevronDown, ChevronLeft, ChevronRight, X, Filter } from 'lucide-react';
+import ReactMarkdown from 'react-markdown';
+import galleryDataRaw from '@/data/gallery-data.json';
 
-// Type definition based on JSON structure
-interface GalleryItem {
-    id: string;
-    category: string;
-    title: string;
-    imagePath: string;
-    description: string;
-}
+import { GalleryItem, GalleryData } from '@/types/gallery';
 
-const galleryData = galleryDataRaw as Record<string, GalleryItem[]>;
+import { getCategoryLabel } from '@/utils/category-map';
 
-// Available categories
-const CATEGORIES = [
-    { id: 'calligraphy', labelKey: 'calligraphy' },
-    { id: 'painting', labelKey: 'painting' },
-    { id: 'life', labelKey: 'life' },
+const galleryData = galleryDataRaw as GalleryData;
+// ... (omitting unchanged parts for brevity if possible, but replace_file_content needs contiguous block. I'll target the imports and then a separate call for the JSX or just do imports first if separate blocks)
+// Actually I can do 2 chunks.
+
+// Chunk 1: Imports
+// Chunk 2: The buttons inside lightbox
+
+const categories = [
+    { id: 'calligraphy', label: '书法作品' },
+    { id: 'painting', label: '字画' },
+    { id: 'seal', label: '篆刻' },
+    { id: 'life', label: '艺术人生' },
 ];
 
-export function GallerySection() {
-    const { t } = useLanguage();
-    const [activeCategory, setActiveCategory] = useState("calligraphy");
+const ITEMS_PER_PAGE_DESKTOP = 12; // Increased to approx 3 rows
+const ITEMS_PER_PAGE_MOBILE = 4;
+
+export function GallerySection({ showHeader = true }: { showHeader?: boolean }) {
+    const [activeCategory, setActiveCategory] = useState('calligraphy');
+    const [visibleItems, setVisibleItems] = useState<GalleryItem[]>([]);
+    const [page, setPage] = useState(1);
+    const [hasMore, setHasMore] = useState(true);
+    const [isLoading, setIsLoading] = useState(false);
     const [selectedImage, setSelectedImage] = useState<GalleryItem | null>(null);
-    const scrollContainerRef = useRef<HTMLDivElement>(null);
+    const [currentImageIndex, setCurrentImageIndex] = useState(0);
+    const [searchQuery, setSearchQuery] = useState('');
+    const [dimensionFilter, setDimensionFilter] = useState('');
 
-    const items = galleryData[activeCategory] || [];
+    // Ref for infinite scroll
+    const bottomRef = useRef<HTMLDivElement>(null);
 
-    // Filter out items without images if any (safety check)
-    const validItems = items.filter(item => item.imagePath);
+    // Get available dimensions for current category
+    const availableDimensions = useMemo(() => {
+        const items = galleryData[activeCategory] || [];
+        const dims = new Set(items.map(item => item.dimensions).filter(Boolean));
+        return Array.from(dims).sort();
+    }, [activeCategory]);
 
-    const scrollLeft = () => {
-        if (scrollContainerRef.current) {
-            scrollContainerRef.current.scrollBy({ left: -300, behavior: 'smooth' });
+    // Filter items based on category, search query, and dimensions
+    const getFilteredItems = () => {
+        let items = galleryData[activeCategory] || [];
+
+        // Filter out items without images
+        items = items.filter(item => item.imagePath);
+
+        // Search Filter
+        if (searchQuery) {
+            const query = searchQuery.toLowerCase();
+            items = items.filter(item =>
+                item.title.toLowerCase().includes(query) ||
+                (item.description && item.description.toLowerCase().includes(query))
+            );
         }
+
+        // Dimension Filter
+        if (dimensionFilter) {
+            items = items.filter(item => item.dimensions === dimensionFilter);
+        }
+
+        return items;
     };
 
-    const scrollRight = () => {
-        if (scrollContainerRef.current) {
-            scrollContainerRef.current.scrollBy({ left: 300, behavior: 'smooth' });
-        }
+    // Reset logic when category, search, or filter changes
+    useEffect(() => {
+        const filtered = getFilteredItems();
+        const isMobile = window.innerWidth < 768;
+        const initialSize = isMobile ? ITEMS_PER_PAGE_MOBILE * 2 : ITEMS_PER_PAGE_DESKTOP;
+
+        setVisibleItems(filtered.slice(0, initialSize));
+        setPage(1);
+        setHasMore(filtered.length > initialSize);
+        setIsLoading(false);
+    }, [activeCategory, searchQuery, dimensionFilter]);
+
+    // Reset dimension filter when category changes
+    useEffect(() => {
+        setDimensionFilter('');
+    }, [activeCategory]);
+
+    // Load More Handler
+    const loadMore = async () => {
+        if (isLoading || !hasMore) return;
+        setIsLoading(true);
+
+        // Simulate network delay
+        await new Promise(resolve => setTimeout(resolve, 600));
+
+        const filtered = getFilteredItems();
+        const isMobile = window.innerWidth < 768;
+        const pageSize = isMobile ? ITEMS_PER_PAGE_MOBILE : ITEMS_PER_PAGE_DESKTOP;
+        const nextPage = page + 1;
+
+        const nextItems = filtered.slice(0, (visibleItems.length + pageSize));
+
+        setVisibleItems(nextItems);
+        setPage(nextPage);
+        setHasMore(filtered.length > nextItems.length);
+        setIsLoading(false);
     };
+
+    // Infinite Scroll for Mobile (using Intersection Observer)
+    useEffect(() => {
+        const observer = new IntersectionObserver(
+            (entries) => {
+                // Only trigger on mobile
+                if (entries[0].isIntersecting && window.innerWidth < 768) {
+                    loadMore();
+                }
+            },
+            { threshold: 0.1 }
+        );
+
+        if (bottomRef.current) observer.observe(bottomRef.current);
+        return () => observer.disconnect();
+    }, [hasMore, isLoading, visibleItems]); // Re-attach when list changes
 
     return (
-        <section className="py-24 px-4 md:px-0 bg-paper-white relative" id="gallery">
-            {/* Header */}
-            <div className="max-w-7xl mx-auto mb-12 text-center px-4 md:px-8">
-                <motion.h2
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    className="text-4xl md:text-5xl font-calligraphy text-ink-black mb-6"
-                >
-                    {t.gallery.title}
-                </motion.h2>
+        <section id="gallery" className="py-24 bg-white min-h-screen">
+            <div className="container mx-auto px-6">
 
-                {/* Category Tabs */}
-                <div className="flex flex-wrap justify-center gap-4">
-                    {CATEGORIES.map((cat) => (
-                        <button
-                            key={cat.id}
-                            onClick={() => setActiveCategory(cat.id)}
-                            className={`px-6 py-2 rounded-full text-sm md:text-base font-serif transition-all duration-300 border ${activeCategory === cat.id
-                                ? "bg-ink-black text-white border-ink-black shadow-md transform scale-105"
-                                : "bg-transparent text-neutral-600 border-neutral-300 hover:border-ink-black/50"
-                                }`}
-                        >
-                            {/* We need to ensure these keys exist in translations, defaulting to English labels for now if missing */}
-                            {cat.id === 'calligraphy' ? (t.gallery.categories[0]?.title.split(' ')[0] || "Calligraphy") :
-                                cat.id === 'painting' ? "国画 / Paintings" :
-                                    cat.id === 'life' ? "生活 / Life" : cat.id}
-                        </button>
-                    ))}
-                </div>
-            </div>
-
-            {/* Horizontal Scroll Carousel Container */}
-            <div className="relative group w-full">
-                {/* Scroll Controls (Visible on Desktop) */}
-                <div className="hidden md:block absolute top-[43%] -translate-y-1/2 left-8 z-20">
-                    <button
-                        onClick={scrollLeft}
-                        className="bg-white/80 backdrop-blur shadow-md hover:bg-white text-ink-black p-3 rounded-full transition-all hover:scale-110 active:scale-95 border border-neutral-200"
+                {/* Header */}
+                {showHeader && (
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        className="text-center mb-12 space-y-4"
                     >
-                        <ChevronLeft size={24} />
-                    </button>
-                </div>
-                <div className="hidden md:block absolute top-[43%] -translate-y-1/2 right-8 z-20">
-                    <button
-                        onClick={scrollRight}
-                        className="bg-white/80 backdrop-blur shadow-md hover:bg-white text-ink-black p-3 rounded-full transition-all hover:scale-110 active:scale-95 border border-neutral-200"
-                    >
-                        <ChevronRight size={24} />
-                    </button>
-                </div>
+                        <h2 className="text-4xl md:text-5xl font-bold font-ma-shan-zheng">墨韵流芳</h2>
+                        <p className="text-lg text-gray-600 font-serif">Calligraphy & Painting Gallery</p>
+                    </motion.div>
+                )}
 
-                {/* Carousel */}
-                <div
-                    ref={scrollContainerRef}
-                    className="flex overflow-x-auto gap-6 px-4 md:px-12 py-8 pb-12 snap-x snap-mandatory scrollbar-none"
-                    style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
-                >
-                    <AnimatePresence mode="popLayout">
-                        {validItems.map((item, index) => (
-                            <motion.div
-                                key={item.id}
-                                layout
-                                initial={{ opacity: 0, x: 20 }}
-                                animate={{ opacity: 1, x: 0 }}
-                                exit={{ opacity: 0, scale: 0.9 }}
-                                transition={{ duration: 0.3 }}
-                                className={`relative flex-none snap-center group/card cursor-pointer overflow-hidden rounded-lg shadow-sm hover:shadow-xl transition-all duration-300 border border-neutral-100 bg-white ${item.category === 'calligraphy'
-                                    ? "w-[280px] h-[500px]" // Taller for calligraphy
-                                    : "w-[360px] h-[260px]" // Wider for landscapes/photos
+                {/* Controls: Categories + Filters */}
+                <div className="flex flex-col gap-6 mb-12">
+
+                    {/* Categories */}
+                    <div className="flex flex-wrap gap-4 justify-center">
+                        {categories.map((cat) => (
+                            <button
+                                key={cat.id}
+                                onClick={() => setActiveCategory(cat.id)}
+                                className={`px-6 py-2 rounded-full text-lg transition-all duration-300 font-serif ${activeCategory === cat.id
+                                    ? 'bg-ink-black text-white shadow-lg scale-105'
+                                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                                     }`}
-                                onClick={() => setSelectedImage(item)}
                             >
-                                <div className="relative w-full h-full">
+                                {cat.label}
+                            </button>
+                        ))}
+                    </div>
+
+                    {/* Search & Filter Bar */}
+                    <div className="flex flex-col md:flex-row justify-center items-center gap-4 max-w-4xl mx-auto w-full">
+
+                        {/* Search Input */}
+                        <div className="relative w-full md:w-64">
+                            <input
+                                type="text"
+                                placeholder="搜索作品..."
+                                value={searchQuery}
+                                onChange={(e) => setSearchQuery(e.target.value)}
+                                className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-full focus:outline-none focus:ring-2 focus:ring-ink-black/20 font-serif"
+                            />
+                            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                        </div>
+
+                        {/* Dimension Filter */}
+                        <div className="relative w-full md:w-48 group">
+                            <div className="relative">
+                                <select
+                                    value={dimensionFilter}
+                                    onChange={(e) => setDimensionFilter(e.target.value)}
+                                    className="w-full appearance-none pl-10 pr-8 py-2 border border-gray-200 rounded-full bg-white focus:outline-none focus:ring-2 focus:ring-ink-black/20 font-serif cursor-pointer hover:border-gray-300 transition-colors"
+                                >
+                                    <option value="">所有尺寸</option>
+                                    {availableDimensions.map((dim: unknown) => (
+                                        <option key={String(dim)} value={String(dim)}>{String(dim)}</option>
+                                    ))}
+                                </select>
+                                <Filter className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                                <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none group-hover:text-gray-600 transition-colors" />
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                {/* Grid */}
+                <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6">
+                    <AnimatePresence mode="popLayout">
+                        {visibleItems.map((item, index) => (
+                            <motion.div
+                                key={`${item.id}-${index}`}
+                                layout
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                exit={{ opacity: 0, scale: 0.9 }}
+                                transition={{ duration: 0.4 }}
+                                className="group cursor-pointer flex flex-col gap-3"
+                                onClick={() => {
+                                    setSelectedImage(item);
+                                    setCurrentImageIndex(0);
+                                }}
+                            >
+                                {/* Image Card */}
+                                <div className="relative aspect-[3/4] overflow-hidden rounded-lg shadow-sm group-hover:shadow-md transition-all">
                                     <Image
                                         src={item.imagePath}
                                         alt={item.title}
                                         fill
-                                        className="object-cover transition-transform duration-700 group-hover/card:scale-105"
-                                        sizes="(max-width: 768px) 80vw, 300px"
+                                        quality={65}
+                                        className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                                        sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw"
                                     />
-                                    {/* Overlay */}
-                                    <div className="absolute inset-0 bg-black/0 group-hover/card:bg-black/20 transition-colors duration-300 flex items-center justify-center opacity-0 group-hover/card:opacity-100">
-                                        <div className="bg-white/90 backdrop-blur text-ink-black px-4 py-2 rounded-full shadow-lg transform translate-y-4 group-hover/card:translate-y-0 transition-transform duration-300 flex items-center gap-2">
-                                            <ZoomIn size={16} />
-                                            <span className="font-serif text-sm">
-                                                {t.featured.hint}
+                                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300" />
+
+                                    {/* Tags Overlay (Bottom Log) - Hide for Life category */}
+                                    {item.category !== 'life' && (
+                                        <div className="absolute bottom-0 left-0 right-0 p-3 flex justify-between items-end pointer-events-none">
+                                            <span className="bg-seal-red/90 text-white text-xs px-2 py-1 rounded backdrop-blur-[2px] shadow-sm">
+                                                {item.artist || '巫师传'}
+                                            </span>
+                                            <span className="bg-seal-red/90 text-white text-xs px-2 py-1 rounded backdrop-blur-[2px] shadow-sm">
+                                                {item.dimensions || '-'}
                                             </span>
                                         </div>
-                                    </div>
+                                    )}
                                 </div>
 
-                                {/* Caption Strip */}
-                                <div className="absolute bottom-0 left-0 right-0 bg-white/95 backdrop-blur-sm p-3 translate-y-full group-hover/card:translate-y-0 transition-transform duration-300 border-t border-neutral-100">
-                                    <h3 className="font-serif text-ink-black font-medium truncate text-center">{item.title}</h3>
+                                {/* Info */}
+                                <div className="space-y-1">
+                                    <h3 className="text-lg font-bold font-serif text-gray-900 line-clamp-1">{item.title}</h3>
+                                    <div className="flex gap-2 text-xs text-gray-500">
+                                        <span className="bg-gray-100 px-1.5 py-0.5 rounded">{getCategoryLabel(item.category)}</span>
+                                        {item.dimensions && item.category !== 'life' && (
+                                            <span className="bg-gray-50 px-1.5 py-0.5 rounded border border-gray-100">{item.dimensions}</span>
+                                        )}
+                                    </div>
                                 </div>
                             </motion.div>
                         ))}
                     </AnimatePresence>
                 </div>
+
+                {visibleItems.length === 0 && !isLoading && (
+                    <div className="text-center py-20 text-gray-400 font-serif">
+                        <p>没有找到匹配的作品</p>
+                        {(searchQuery || dimensionFilter) && (
+                            <button
+                                onClick={() => { setSearchQuery(''); setDimensionFilter(''); }}
+                                className="mt-4 text-ink-black underline hover:text-seal-red"
+                            >
+                                清除筛选条件
+                            </button>
+                        )}
+                    </div>
+                )}
+
+                {/* Load More Trigger */}
+                <div className="mt-16 text-center">
+                    {isLoading ? (
+                        <div className="flex items-center justify-center gap-2 text-gray-500">
+                            <Loader2 className="w-5 h-5 animate-spin" />
+                            <span>正在加载更多佳作...</span>
+                        </div>
+                    ) : hasMore ? (
+                        <>
+                            {/* Desktop Button */}
+                            <button
+                                onClick={loadMore}
+                                className="hidden md:inline-flex items-center gap-2 px-8 py-3 rounded-full border border-gray-300 hover:border-ink-black hover:bg-ink-black hover:text-white transition-all group font-serif"
+                            >
+                                <span>浏览更多</span>
+                                <ChevronDown className="w-4 h-4 group-hover:translate-y-1 transition-transform" />
+                            </button>
+
+                            {/* Mobile Infinite Scroll Trigger */}
+                            <div ref={bottomRef} className="md:hidden h-10" />
+                        </>
+                    ) : (
+                        visibleItems.length > 0 && <p className="text-gray-400 font-serif italic">—— 已展示全部作品 ——</p>
+                    )}
+                </div>
             </div>
 
-            {/* Lightbox Modal */}
+            {/* Lightbox */}
             <AnimatePresence>
                 {selectedImage && (
                     <motion.div
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
-                        className="fixed inset-0 z-[100] bg-black/95 backdrop-blur-md flex items-center justify-center p-4 md:p-8"
+                        className="fixed inset-0 z-[60] bg-black/95 backdrop-blur-sm p-4 md:p-10 flex items-center justify-center"
                         onClick={() => setSelectedImage(null)}
                     >
-                        {/* Close button */}
-                        <button
-                            className="absolute top-6 right-6 text-white/70 hover:text-white transition-colors z-50 p-2 bg-black/20 rounded-full"
-                            onClick={() => setSelectedImage(null)}
-                        >
-                            <X size={32} />
-                        </button>
+                        <div className="relative w-full max-w-6xl max-h-full flex flex-col md:flex-row gap-8 items-center" onClick={e => e.stopPropagation()}>
+                            {/* Close Button */}
+                            <button
+                                onClick={() => setSelectedImage(null)}
+                                className="absolute top-2 right-2 md:-top-8 md:-right-8 p-2 text-white/50 hover:text-white transition-colors z-50"
+                            >
+                                <X className="w-8 h-8" />
+                            </button>
 
-                        <motion.div
-                            initial={{ scale: 0.95, opacity: 0 }}
-                            animate={{ scale: 1, opacity: 1 }}
-                            exit={{ scale: 0.95, opacity: 0 }}
-                            className="relative w-full max-w-6xl h-[85vh] bg-paper-white rounded-lg shadow-2xl overflow-hidden flex flex-col md:flex-row"
-                            onClick={(e) => e.stopPropagation()}
-                        >
                             {/* Image Container */}
-                            <div className="relative flex-1 bg-neutral-900/5 min-h-[50vh] md:min-h-full flex items-center justify-center p-4">
-                                <div className="relative w-full h-full">
+                            <div className="relative w-full md:w-2/3 h-[50vh] md:h-[80vh] flex-shrink-0 flex flex-col gap-4">
+                                <div className="relative w-full flex-1 min-h-0">
                                     <Image
-                                        src={selectedImage.imagePath}
+                                        src={selectedImage.images ? selectedImage.images[currentImageIndex] : selectedImage.imagePath}
                                         alt={selectedImage.title}
                                         fill
+                                        quality={90}
                                         className="object-contain"
                                     />
+
+                                    {/* Artwork Navigation Arrows (Previous/Next Item) */}
+                                    {visibleItems.length > 1 && (
+                                        <>
+                                            <button
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    const currentIndex = visibleItems.findIndex(item => item.id === selectedImage.id);
+                                                    const prevIndex = (currentIndex - 1 + visibleItems.length) % visibleItems.length;
+                                                    setSelectedImage(visibleItems[prevIndex]);
+                                                    setCurrentImageIndex(0);
+                                                }}
+                                                className="fixed left-4 top-1/2 -translate-y-1/2 p-3 bg-white/10 hover:bg-white/20 text-white rounded-full transition-colors z-[70] backdrop-blur-sm group/nav"
+                                                title="Previous Artwork"
+                                            >
+                                                <ChevronLeft className="w-8 h-8 opacity-70 group-hover/nav:opacity-100" />
+                                            </button>
+                                            <button
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    const currentIndex = visibleItems.findIndex(item => item.id === selectedImage.id);
+                                                    const nextIndex = (currentIndex + 1) % visibleItems.length;
+                                                    setSelectedImage(visibleItems[nextIndex]);
+                                                    setCurrentImageIndex(0);
+                                                }}
+                                                className="fixed right-4 top-1/2 -translate-y-1/2 p-3 bg-white/10 hover:bg-white/20 text-white rounded-full transition-colors z-[70] backdrop-blur-sm group/nav"
+                                                title="Next Artwork"
+                                            >
+                                                <ChevronRight className="w-8 h-8 opacity-70 group-hover/nav:opacity-100" />
+                                            </button>
+                                        </>
+                                    )}
+
+                                    {/* Internal Image Navigation Arrows (only if multiple images) */}
+                                    {selectedImage.images && selectedImage.images.length > 1 && (
+                                        <>
+                                            <button
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    setCurrentImageIndex(prev => prev > 0 ? prev - 1 : (selectedImage.images?.length || 1) - 1);
+                                                }}
+                                                className="absolute left-2 top-1/2 -translate-y-1/2 p-2 bg-black/50 text-white rounded-full hover:bg-black/70 transition-colors"
+                                            >
+                                                ←
+                                            </button>
+                                            <button
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    setCurrentImageIndex(prev => prev < (selectedImage.images?.length || 1) - 1 ? prev + 1 : 0);
+                                                }}
+                                                className="absolute right-2 top-1/2 -translate-y-1/2 p-2 bg-black/50 text-white rounded-full hover:bg-black/70 transition-colors"
+                                            >
+                                                →
+                                            </button>
+                                        </>
+                                    )}
                                 </div>
+
+                                {/* Thumbnails (only if multiple images) */}
+                                {selectedImage.images && selectedImage.images.length > 1 && (
+                                    <div className="h-20 w-full overflow-x-auto flex gap-2 justify-center py-2 custom-scrollbar">
+                                        {selectedImage.images.map((img, idx) => (
+                                            <button
+                                                key={idx}
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    setCurrentImageIndex(idx);
+                                                }}
+                                                className={`relative w-16 h-16 flex-shrink-0 border-2 rounded overflow-hidden transition-all ${currentImageIndex === idx ? 'border-seal-red scale-105' : 'border-transparent opacity-60 hover:opacity-100'
+                                                    }`}
+                                            >
+                                                <Image
+                                                    src={img}
+                                                    alt={`Thumbnail ${idx + 1}`}
+                                                    fill
+                                                    className="object-cover"
+                                                />
+                                            </button>
+                                        ))}
+                                    </div>
+                                )}
                             </div>
 
-                            {/* Info Container (if description exists) */}
-                            {selectedImage.description && (
-                                <div className="w-full md:w-[380px] flex-none flex flex-col border-l border-neutral-200 bg-white h-[40vh] md:h-full">
-                                    <div className="p-6 md:p-8 overflow-y-auto h-full scrollbar-thin">
-                                        <h3 className="text-2xl font-serif text-ink-black mb-6 pb-4 border-b border-neutral-100 sticky top-0 bg-white z-10">
-                                            {selectedImage.title}
-                                        </h3>
-                                        {selectedImage.category === 'calligraphy' ? (
-                                            <div className="prose prose-stone prose-sm max-w-none font-serif text-neutral-600 leading-relaxed font-light">
-                                                <ReactMarkdown>
-                                                    {selectedImage.description}
-                                                </ReactMarkdown>
+                            {/* Info Panel */}
+                            <div className="w-full md:w-1/3 text-white overflow-y-auto max-h-[30vh] md:max-h-[80vh] custom-scrollbar flex flex-col h-full">
+                                <div className="flex-1">
+                                    <h3 className="text-3xl font-bold font-ma-shan-zheng mb-6 text-seal-red">{selectedImage.title}</h3>
+
+                                    {/* Detailed Attributes Table */}
+                                    <div className="space-y-3 font-serif text-sm text-gray-300 mb-8">
+                                        {[
+                                            { label: '【字体】', value: selectedImage.font },
+                                            { label: '【年代】', value: selectedImage.era },
+                                            { label: '【尺寸/规格】', value: selectedImage.dimensions },
+                                            { label: '【装裱】', value: selectedImage.mounting },
+                                            { label: '【材质】', value: selectedImage.material },
+                                            { label: '【样式】', value: selectedImage.style },
+                                            { label: '【作者】', value: selectedImage.artist || '巫师传' },
+                                            { label: '【性质】', value: selectedImage.nature },
+                                        ].filter(attr => attr.value).map((attr, i) => (
+                                            <div key={i} className="flex border-b border-dashed border-white/20 pb-2 last:border-0">
+                                                <span className="font-bold text-gray-400 w-24 flex-shrink-0">{attr.label}</span>
+                                                <span className="text-white">{attr.value}</span>
                                             </div>
-                                        ) : (
-                                            <p className="font-serif text-neutral-600 leading-relaxed">
-                                                {selectedImage.description}
-                                            </p>
-                                        )}
+                                        ))}
+                                    </div>
+
+                                    {/* Description */}
+                                    <div className="prose prose-invert prose-sm max-w-none text-gray-300 font-serif leading-relaxed mb-8">
+                                        <h4 className="font-bold text-gray-400 mb-2">作品简介</h4>
+                                        <ReactMarkdown>{selectedImage.description || '中书协理事苏适精品书法作品\n竞拍成功赠送 收藏证书\n自然拍摄 无修图 实物更佳\n印刷品十倍赔偿'}</ReactMarkdown>
                                     </div>
                                 </div>
-                            )}
 
-                            {/* If no description, maintain modal structure */}
-                            {!selectedImage.description && (
-                                <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/60 to-transparent pointer-events-none">
-                                    <h3 className="text-white text-xl font-serif text-center">{selectedImage.title}</h3>
+                                {/* Purchase Button */}
+                                <div className="pt-6 border-t border-white/10 mt-auto">
+                                    <a
+                                        href={selectedImage.purchaseLink || '#'}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className={`flex items-center justify-center w-full font-bold py-4 rounded-lg transition-all transform hover:scale-[1.02] shadow-lg text-lg tracking-widest ${selectedImage.purchaseLink
+                                            ? 'bg-seal-red hover:bg-red-700 text-white'
+                                            : 'bg-gray-700 cursor-not-allowed text-gray-400'
+                                            }`}
+                                        onClick={(e) => !selectedImage.purchaseLink && e.preventDefault()}
+                                    >
+                                        {selectedImage.purchaseLink ? '立即购买 / 竞拍' : '暂无购买链接'}
+                                    </a>
+                                    <p className="text-center text-xs text-gray-500 mt-3 font-serif">
+                                        * 点击跳转至微拍堂进行交易
+                                    </p>
                                 </div>
-                            )}
-                        </motion.div>
+                            </div>
+                        </div>
                     </motion.div>
                 )}
             </AnimatePresence>

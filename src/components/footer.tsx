@@ -1,6 +1,7 @@
 "use client";
 
 import { useLanguage } from "./language-provider";
+import Image from "next/image";
 
 export function Footer() {
     const { t } = useLanguage();
@@ -8,8 +9,14 @@ export function Footer() {
         <footer className="w-full py-12 bg-ink-black text-white/60 border-t border-white/10">
             <div className="max-w-7xl mx-auto px-6 flex flex-col items-center gap-8">
                 {/* Seal */}
-                <div className="w-16 h-16 border-2 border-seal-red rounded flex items-center justify-center bg-seal-red text-white text-2xl font-serif">
-                    吉庐
+                {/* Seal */}
+                <div className="relative w-20 h-20 transition-transform duration-300 hover:scale-105">
+                    <Image
+                        src="/吉庐logo/logo_seal_carved.png"
+                        alt="吉庐 - Ji Lu"
+                        fill
+                        className="object-contain"
+                    />
                 </div>
 
                 <nav className="flex gap-8 text-sm font-serif tracking-widest">

@@ -40,7 +40,13 @@ export const metadata: Metadata = {
 };
 
 import { LanguageProvider } from "@/components/language-provider";
+import { DesktopNav } from "@/components/desktop-nav";
+import { MobileNav } from "@/components/mobile-nav";
 // ... imports
+
+import { ScrollProgress } from "@/components/scroll-progress";
+
+// ... prior code
 
 export default function RootLayout({
   children,
@@ -48,12 +54,17 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="zh-CN">
+    <html lang="zh-CN" className="scroll-smooth">
       <body
         className={`${notoSerifSC.variable} ${maShanZheng.variable} antialiased bg-paper-white text-ink-black`}
       >
+        <ScrollProgress />
         <LanguageProvider>
-          {children}
+          <DesktopNav />
+          <main className="pb-20 md:pb-0">
+            {children}
+          </main>
+          <MobileNav />
         </LanguageProvider>
       </body>
     </html>
