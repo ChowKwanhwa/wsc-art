@@ -5,18 +5,11 @@ import Image from 'next/image';
 import { useState, useEffect, useRef, useMemo } from 'react';
 import { Search, Loader2, ChevronDown, ChevronLeft, ChevronRight, X, Filter } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
-import galleryDataRaw from '@/data/gallery-data.json';
-
 import { GalleryItem, GalleryData } from '@/types/gallery';
 
 import { getCategoryLabel } from '@/utils/category-map';
 
-const galleryData = galleryDataRaw as GalleryData;
-// ... (omitting unchanged parts for brevity if possible, but replace_file_content needs contiguous block. I'll target the imports and then a separate call for the JSX or just do imports first if separate blocks)
-// Actually I can do 2 chunks.
-
-// Chunk 1: Imports
-// Chunk 2: The buttons inside lightbox
+// Chunk 1: Imports removed
 
 const categories = [
     { id: 'calligraphy', label: '书法作品' },
@@ -28,7 +21,8 @@ const categories = [
 const ITEMS_PER_PAGE_DESKTOP = 12; // Increased to approx 3 rows
 const ITEMS_PER_PAGE_MOBILE = 4;
 
-export function GallerySection({ showHeader = true }: { showHeader?: boolean }) {
+export function GallerySection({ showHeader = true, initialData }: { showHeader?: boolean; initialData: GalleryData }) {
+    const galleryData = initialData;
     const [activeCategory, setActiveCategory] = useState('calligraphy');
     const [visibleItems, setVisibleItems] = useState<GalleryItem[]>([]);
     const [page, setPage] = useState(1);

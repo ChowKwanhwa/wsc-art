@@ -165,6 +165,7 @@ export async function approveArtwork(item: GalleryItem) {
 
     revalidatePath('/');
     revalidatePath('/admin/dashboard');
+    revalidatePath('/gallery');
     return { success: true };
 }
 
@@ -257,5 +258,15 @@ export async function deleteApprovedArtwork(id: string, category: string) {
 
     revalidatePath('/');
     revalidatePath('/admin/dashboard');
+    revalidatePath('/gallery');
     return { success: true };
+}
+
+export async function getGalleryData(): Promise<GalleryData> {
+    try {
+        const fileContent = await fs.readFile(PUBLIC_DATA_PATH, 'utf-8');
+        return JSON.parse(fileContent);
+    } catch (error) {
+        return {};
+    }
 }

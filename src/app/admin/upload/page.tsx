@@ -140,12 +140,12 @@ export default function UploadPage() {
                 </div>
 
                 <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">购买链接 (微拍堂/淘宝等)</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">购买链接 (选填)</label>
                     <input
                         name="purchaseLink"
-                        type="url"
-                        placeholder="https://..."
-                        className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-seal-red/20 outline-none text-seal-red"
+                        type="text"
+                        placeholder="请输入微拍堂或淘宝链接..."
+                        className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-ink-black/20 outline-none"
                     />
                 </div>
 
