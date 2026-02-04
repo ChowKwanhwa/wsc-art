@@ -16,7 +16,10 @@ const categories = [
     { id: 'painting', label: '字画' },
     { id: 'seal', label: '篆刻' },
     { id: 'life', label: '艺术人生' },
+    { id: 'other', label: '其他' },
 ];
+
+const MAIN_CATEGORIES = ['calligraphy', 'painting', 'seal', 'life', 'other']; // "other" is special, but keys like "smoke" are strictly custom
 
 const ITEMS_PER_PAGE_DESKTOP = 12; // Increased to approx 3 rows
 const ITEMS_PER_PAGE_MOBILE = 4;
@@ -32,20 +35,48 @@ export function GallerySection({ showHeader = true, initialData }: { showHeader?
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
     const [searchQuery, setSearchQuery] = useState('');
     const [dimensionFilter, setDimensionFilter] = useState('');
+    const [subCategoryFilter, setSubCategoryFilter] = useState(''); // New: For custom categories under "Other"
 
     // Ref for infinite scroll
     const bottomRef = useRef<HTMLDivElement>(null);
 
+    // Identify custom categories (keys in data that are NOT in the fixed main list)
+    // Note: 'other' is a UI tab, not a data key. Data keys will be 'smoke', 'wine', etc.
+    const customCategoryKeys = useMemo(() => {
+        const fixedKeys = ['calligraphy', 'painting', 'seal', 'life'];
+        return Object.keys(galleryData).filter(key => !fixedKeys.includes(key));
+    }, [galleryData]);
     // Get available dimensions for current category
     const availableDimensions = useMemo(() => {
-        const items = galleryData[activeCategory] || [];
+        let items: GalleryItem[] = [];
+        if (activeCategory === 'other') {
+            // Combine all custom categories
+            items = customCategoryKeys.flatMap(key => galleryData[key] || []);
+        } else {
+            items = galleryData[activeCategory] || [];
+        }
+
         const dims = new Set(items.map(item => item.dimensions).filter(Boolean));
         return Array.from(dims).sort();
-    }, [activeCategory]);
+    }, [activeCategory, galleryData, customCategoryKeys]);
 
     // Filter items based on category, search query, and dimensions
+    // Filter items based on category, search query, and dimensions
     const getFilteredItems = () => {
-        let items = galleryData[activeCategory] || [];
+        let items: GalleryItem[] = [];
+
+        if (activeCategory === 'other') {
+            if (subCategoryFilter) {
+                // Show specific custom category
+                items = galleryData[subCategoryFilter] || [];
+            } else {
+                // Show ALL custom categories
+                items = customCategoryKeys.flatMap(key => galleryData[key] || []);
+            }
+        } else {
+            // Standard category
+            items = galleryData[activeCategory] || [];
+        }
 
         // Filter out items without images
         items = items.filter(item => item.imagePath);
@@ -77,11 +108,12 @@ export function GallerySection({ showHeader = true, initialData }: { showHeader?
         setPage(1);
         setHasMore(filtered.length > initialSize);
         setIsLoading(false);
-    }, [activeCategory, searchQuery, dimensionFilter]);
+    }, [activeCategory, searchQuery, dimensionFilter, subCategoryFilter]);
 
-    // Reset dimension filter when category changes
+    // Reset filters when category changes
     useEffect(() => {
         setDimensionFilter('');
+        setSubCategoryFilter('');
     }, [activeCategory]);
 
     // Load More Handler
@@ -156,6 +188,33 @@ export function GallerySection({ showHeader = true, initialData }: { showHeader?
                             </button>
                         ))}
                     </div>
+
+                    {/* Sub-Category Filter (Only for 'Other') */}
+                    {activeCategory === 'other' && customCategoryKeys.length > 0 && (
+                        <div className="flex flex-wrap gap-2 justify-center -mt-2 animate-fade-in">
+                            <button
+                                onClick={() => setSubCategoryFilter('')}
+                                className={`px-4 py-1.5 rounded-full text-sm font-serif transition-colors ${!subCategoryFilter
+                                    ? 'bg-seal-red text-white'
+                                    : 'bg-white border border-gray-200 text-gray-500 hover:border-seal-red hover:text-seal-red'
+                                    }`}
+                            >
+                                全部
+                            </button>
+                            {customCategoryKeys.map((key) => (
+                                <button
+                                    key={key}
+                                    onClick={() => setSubCategoryFilter(key)}
+                                    className={`px-4 py-1.5 rounded-full text-sm font-serif transition-colors ${subCategoryFilter === key
+                                        ? 'bg-seal-red text-white'
+                                        : 'bg-white border border-gray-200 text-gray-500 hover:border-seal-red hover:text-seal-red'
+                                        }`}
+                                >
+                                    {key}
+                                </button>
+                            ))}
+                        </div>
+                    )}
 
                     {/* Search & Filter Bar */}
                     <div className="flex flex-col md:flex-row justify-center items-center gap-4 max-w-4xl mx-auto w-full">

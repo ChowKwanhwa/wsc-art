@@ -39,9 +39,15 @@ export async function submitArtwork(formData: FormData) {
 
     const images = formData.getAll('images') as File[];
 
-    if (!title || !finalCategory || images.length === 0) {
-        throw new Error('Missing required fields');
+    // Relaxed validation: Allow empty title/category, but we still need an image to display
+    if (images.length === 0) {
+        throw new Error('At least one image is required');
     }
+
+    // Default title if empty
+    const finalTitle = title || '未命名作品';
+    // Default category if empty (though UI has a default)
+    const effectiveCategory = finalCategory || 'other';
 
     const id = Date.now().toString();
     const savedImagePaths: string[] = [];
@@ -61,8 +67,8 @@ export async function submitArtwork(formData: FormData) {
 
     const newItem: GalleryItem = {
         id,
-        category: finalCategory,
-        title,
+        category: effectiveCategory,
+        title: finalTitle,
         imagePath: savedImagePaths[0],
         images: savedImagePaths,
         description,

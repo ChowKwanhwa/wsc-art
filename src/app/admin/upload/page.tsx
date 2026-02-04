@@ -65,7 +65,6 @@ export default function UploadPage() {
                             name="images"
                             multiple
                             accept="image/*"
-                            required
                             onChange={handleFileChange}
                             className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
                         />
@@ -88,8 +87,8 @@ export default function UploadPage() {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">作品名称</label>
-                        <input name="title" required className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-ink-black/20 outline-none" placeholder="例如：兰亭序拓本" />
+                        <label className="block text-sm font-medium text-gray-700 mb-1">作品名称 (选填)</label>
+                        <input name="title" className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-ink-black/20 outline-none" placeholder="例如：兰亭序拓本" />
                     </div>
 
                     <div>
@@ -103,8 +102,8 @@ export default function UploadPage() {
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">尺寸/规格</label>
-                        <input name="dimensions" placeholder="例如：138cm x 69cm" required className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-ink-black/20 outline-none" />
+                        <label className="block text-sm font-medium text-gray-700 mb-1">尺寸/规格 (选填)</label>
+                        <input name="dimensions" placeholder="例如：138cm x 69cm" className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-ink-black/20 outline-none" />
                     </div>
                 </div>
 
@@ -199,8 +198,7 @@ function CategorySelector() {
                 <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }}>
                     <input
                         name="customCategory"
-                        required={isCustom}
-                        placeholder="输入自定义分类ID (如 'ceramics')"
+                        placeholder="输入自定义分类名称 (如 '烟', '酒')"
                         className="w-full px-4 py-2 border border-seal-red/30 bg-red-50 rounded-lg focus:ring-2 focus:ring-seal-red/20 outline-none text-seal-red text-sm"
                     />
                 </motion.div>
