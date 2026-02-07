@@ -364,6 +364,510 @@
       "description": "",
       "artist": "冯牧",
       "dimensions": "138cm x 68cm"
+    },
+    {
+      "id": "qiaosen-huaniao-1",
+      "category": "painting",
+      "title": "花鸟",
+      "imagePath": "/paintings/乔森 花鸟 68 X 68.jpg",
+      "description": "",
+      "artist": "乔森",
+      "dimensions": "68cm x 68cm"
+    },
+    {
+      "id": "qiaosen-huaniao-2",
+      "category": "painting",
+      "title": "花鸟2",
+      "imagePath": "/paintings/乔森 花鸟2 68 X 68.jpg.jpg",
+      "description": "",
+      "artist": "乔森",
+      "dimensions": "68cm x 68cm"
+    },
+    {
+      "id": "qiaosen-huaniao-3",
+      "category": "painting",
+      "title": "花鸟3",
+      "imagePath": "/paintings/乔森 花鸟3 68 X 68.jpg",
+      "description": "",
+      "artist": "乔森",
+      "dimensions": "68cm x 68cm"
+    },
+    {
+      "id": "qiaosen-huaniao-4",
+      "category": "painting",
+      "title": "花鸟4",
+      "imagePath": "/paintings/乔森 花鸟4 68 X 68.jpg",
+      "description": "",
+      "artist": "乔森",
+      "dimensions": "68cm x 68cm"
+    },
+    {
+      "id": "hedianrong-shanshui",
+      "category": "painting",
+      "title": "山水",
+      "imagePath": "/paintings/何典荣 山水 138 X 68.jpg",
+      "description": "",
+      "artist": "何典荣",
+      "dimensions": "138cm x 68cm"
+    },
+    {
+      "id": "liuzihan-mudan",
+      "category": "painting",
+      "title": "牡丹",
+      "imagePath": "/paintings/刘子涵 牡丹 80 X 96.jpg",
+      "description": "",
+      "artist": "刘子涵",
+      "dimensions": "80cm x 96cm"
+    },
+    {
+      "id": "liuxiaoli-renwu",
+      "category": "painting",
+      "title": "人物",
+      "imagePath": "/paintings/刘孝礼 人物 138 X 68.jpg",
+      "description": "",
+      "artist": "刘孝礼",
+      "dimensions": "138cm x 68cm"
+    },
+    {
+      "id": "liuxiaoli-shanshui-1",
+      "category": "painting",
+      "title": "山水",
+      "imagePath": "/paintings/刘孝礼 山水 138 X 68.jpg",
+      "description": "",
+      "artist": "刘孝礼",
+      "dimensions": "138cm x 68cm"
+    },
+    {
+      "id": "liuxiaoli-shanshui-2",
+      "category": "painting",
+      "title": "山水2",
+      "imagePath": "/paintings/刘孝礼 山水2 138 X 68.jpg",
+      "description": "",
+      "artist": "刘孝礼",
+      "dimensions": "138cm x 68cm"
+    },
+    {
+      "id": "liuxiaoli-shanshui-3",
+      "category": "painting",
+      "title": "山水3",
+      "imagePath": "/paintings/刘孝礼 山水3 138 X 68.jpg",
+      "description": "",
+      "artist": "刘孝礼",
+      "dimensions": "138cm x 68cm"
+    },
+    {
+      "id": "liuxiaoli-shanshui-4",
+      "category": "painting",
+      "title": "山水4",
+      "imagePath": "/paintings/刘孝礼 山水4 138 X 68.jpg",
+      "description": "",
+      "artist": "刘孝礼",
+      "dimensions": "138cm x 68cm"
+    },
+    {
+      "id": "liuxiaoli-shanshui-5",
+      "category": "painting",
+      "title": "山水5",
+      "imagePath": "/paintings/刘孝礼 山水5 138 X 68.jpg",
+      "description": "",
+      "artist": "刘孝礼",
+      "dimensions": "138cm x 68cm"
+    },
+    {
+      "id": "liuxiaoli-shanshui-6",
+      "category": "painting",
+      "title": "山水6",
+      "imagePath": "/paintings/刘孝礼 山水6 138 X 68.jpg",
+      "description": "",
+      "artist": "刘孝礼",
+      "dimensions": "138cm x 68cm"
+    },
+    {
+      "id": "liuxiaoli-shanshui-7",
+      "category": "painting",
+      "title": "山水7",
+      "imagePath": "/paintings/刘孝礼 山水7 138 X 68.jpg",
+      "description": "",
+      "artist": "刘孝礼",
+      "dimensions": "138cm x 68cm"
+    },
+    {
+      "id": "liuxiaoli-shanshui-8",
+      "category": "painting",
+      "title": "山水8",
+      "imagePath": "/paintings/刘孝礼 山水8 138 X 68.jpg",
+      "description": "",
+      "artist": "刘孝礼",
+      "dimensions": "138cm x 68cm"
+    },
+    {
+      "id": "liuxiaoli-shanshui-9",
+      "category": "painting",
+      "title": "山水9",
+      "imagePath": "/paintings/刘孝礼 山水9 138 X 68.jpg",
+      "description": "",
+      "artist": "刘孝礼",
+      "dimensions": "138cm x 68cm"
+    },
+    {
+      "id": "liuxiaoli-shanshui-10",
+      "category": "painting",
+      "title": "山水10",
+      "imagePath": "/paintings/刘孝礼 山水10 138 X 68.jpg",
+      "description": "",
+      "artist": "刘孝礼",
+      "dimensions": "138cm x 68cm"
+    },
+    {
+      "id": "liuxiaoli-shanshui-11",
+      "category": "painting",
+      "title": "山水11",
+      "imagePath": "/paintings/刘孝礼 山水11 138 X 68.jpg",
+      "description": "",
+      "artist": "刘孝礼",
+      "dimensions": "138cm x 68cm"
+    },
+    {
+      "id": "liuchunxiang-huaniao",
+      "category": "painting",
+      "title": "花鸟",
+      "imagePath": "/paintings/刘春香 花鸟 180 X 96.jpg",
+      "description": "",
+      "artist": "刘春香",
+      "dimensions": "180cm x 96cm"
+    },
+    {
+      "id": "yuzhigao-huaniao",
+      "category": "painting",
+      "title": "花鸟",
+      "imagePath": "/paintings/喻志高 花鸟 68 X 68.jpg",
+      "description": "",
+      "artist": "喻志高",
+      "dimensions": "68cm x 68cm"
+    },
+    {
+      "id": "shizhenquan-shanshui-1",
+      "category": "painting",
+      "title": "山水",
+      "imagePath": "/paintings/施贞泉 山水 68 X 68.jpg",
+      "description": "",
+      "artist": "施贞泉",
+      "dimensions": "68cm x 68cm"
+    },
+    {
+      "id": "shizhenquan-shanshui-2",
+      "category": "painting",
+      "title": "山水2",
+      "imagePath": "/paintings/施贞泉 山水2 68 X 68.jpg",
+      "description": "",
+      "artist": "施贞泉",
+      "dimensions": "68cm x 68cm"
+    },
+    {
+      "id": "shizhenquan-shanshui-3",
+      "category": "painting",
+      "title": "山水3",
+      "imagePath": "/paintings/施贞泉 山水3 68 X 68.jpg",
+      "description": "",
+      "artist": "施贞泉",
+      "dimensions": "68cm x 68cm"
+    },
+    {
+      "id": "shizhenquan-shanshui-4",
+      "category": "painting",
+      "title": "山水4",
+      "imagePath": "/paintings/施贞泉 山水4 68 X 68.jpg",
+      "description": "",
+      "artist": "施贞泉",
+      "dimensions": "68cm x 68cm"
+    },
+    {
+      "id": "shizhenquan-shanshui-5",
+      "category": "painting",
+      "title": "山水",
+      "imagePath": "/paintings/施贞泉山水180 X 96.jpg",
+      "description": "",
+      "artist": "施贞泉",
+      "dimensions": "180cm x 96cm"
+    },
+    {
+      "id": "shizhenquan-shanshui-6",
+      "category": "painting",
+      "title": "山水(装裱)",
+      "imagePath": "/paintings/施贞泉山水180 X 96装裱.jpg",
+      "description": "",
+      "artist": "施贞泉",
+      "dimensions": "180cm x 96cm"
+    },
+    {
+      "id": "zhushiming-xiangcun-1",
+      "category": "painting",
+      "title": "乡村",
+      "imagePath": "/paintings/乡村 75 X 50.jpg",
+      "description": "",
+      "artist": "朱仕明",
+      "dimensions": "75cm x 50cm"
+    },
+    {
+      "id": "zhushiming-xiangcun-2",
+      "category": "painting",
+      "title": "乡村2",
+      "imagePath": "/paintings/乡村2 75 X 50.jpg",
+      "description": "",
+      "artist": "朱仕明",
+      "dimensions": "75cm x 50cm"
+    },
+    {
+      "id": "zhushiming-xiangcun-dujing",
+      "category": "painting",
+      "title": "乡村独径",
+      "imagePath": "/paintings/乡村独径 75 X 50.jpg",
+      "description": "",
+      "artist": "朱仕明",
+      "dimensions": "75cm x 50cm"
+    },
+    {
+      "id": "zhushiming-xiangcun-shenghuo",
+      "category": "painting",
+      "title": "乡村生活",
+      "imagePath": "/paintings/乡村生活 75 X 50.jpg",
+      "description": "",
+      "artist": "朱仕明",
+      "dimensions": "75cm x 50cm"
+    },
+    {
+      "id": "zhushiming-liangting",
+      "category": "painting",
+      "title": "凉亭山水",
+      "imagePath": "/paintings/凉亭山水 75 X 50.jpg",
+      "description": "",
+      "artist": "朱仕明",
+      "dimensions": "75cm x 50cm"
+    },
+    {
+      "id": "zhushiming-shan",
+      "category": "painting",
+      "title": "山",
+      "imagePath": "/paintings/山 75 X 50.jpg",
+      "description": "",
+      "artist": "朱仕明",
+      "dimensions": "75cm x 50cm"
+    },
+    {
+      "id": "zhushiming-lvye",
+      "category": "painting",
+      "title": "绿野仙踪",
+      "imagePath": "/paintings/绿野仙踪 75 X 50.jpg",
+      "description": "",
+      "artist": "朱仕明",
+      "dimensions": "75cm x 50cm"
+    },
+    {
+      "id": "zhushiming-yecun-1",
+      "category": "painting",
+      "title": "野村",
+      "imagePath": "/paintings/野村 75 X 50.jpg",
+      "description": "",
+      "artist": "朱仕明",
+      "dimensions": "75cm x 50cm"
+    },
+    {
+      "id": "zhushiming-yecun-2",
+      "category": "painting",
+      "title": "野村2",
+      "imagePath": "/paintings/野村2 75 X 50.jpg",
+      "description": "",
+      "artist": "朱仕明",
+      "dimensions": "75cm x 50cm"
+    },
+    {
+      "id": "zhushiming-yecun-duju",
+      "category": "painting",
+      "title": "野村独居",
+      "imagePath": "/paintings/野村独居 75 X 50.jpg",
+      "description": "",
+      "artist": "朱仕明",
+      "dimensions": "75cm x 50cm"
+    },
+    {
+      "id": "zhushiming-xuexiang",
+      "category": "painting",
+      "title": "雪乡",
+      "imagePath": "/paintings/雪乡 75 X 50.jpg",
+      "description": "",
+      "artist": "朱仕明",
+      "dimensions": "75cm x 50cm"
+    },
+    {
+      "id": "zhushiming-feiniao",
+      "category": "painting",
+      "title": "飞鸟山居",
+      "imagePath": "/paintings/飞鸟山居 75 X 50.jpg",
+      "description": "",
+      "artist": "朱仕明",
+      "dimensions": "75cm x 50cm"
+    },
+    {
+      "id": "zhutongfu-shanshui-1",
+      "category": "painting",
+      "title": "山水",
+      "imagePath": "/paintings/朱同辅 山水 240 X 96.jpg",
+      "description": "",
+      "artist": "朱同辅",
+      "dimensions": "240cm x 96cm"
+    },
+    {
+      "id": "zhutongfu-shanshui-2",
+      "category": "painting",
+      "title": "山水",
+      "imagePath": "/paintings/朱同辅 山水 244x124.jpg",
+      "description": "",
+      "artist": "朱同辅",
+      "dimensions": "244cm x 124cm"
+    },
+    {
+      "id": "yangyongjia-renwu-1",
+      "category": "painting",
+      "title": "人物",
+      "imagePath": "/paintings/杨永家 人物 138 X 68.jpg",
+      "description": "",
+      "artist": "杨永家",
+      "dimensions": "138cm x 68cm"
+    },
+    {
+      "id": "yangyongjia-renwu-2",
+      "category": "painting",
+      "title": "人物2",
+      "imagePath": "/paintings/杨永家 人物2 138 X 68.jpg",
+      "description": "",
+      "artist": "杨永家",
+      "dimensions": "138cm x 68cm"
+    },
+    {
+      "id": "liangbo-renwu",
+      "category": "painting",
+      "title": "人物",
+      "imagePath": "/paintings/梁波 人物 138 X 68.jpg",
+      "description": "",
+      "artist": "梁波",
+      "dimensions": "138cm x 68cm"
+    },
+    {
+      "id": "shenfengming-renwu",
+      "category": "painting",
+      "title": "人物",
+      "imagePath": "/paintings/沈丰明人物68 X 68.jpg",
+      "description": "",
+      "artist": "沈丰明",
+      "dimensions": "68cm x 68cm"
+    },
+    {
+      "id": "youtianyun-shanshui",
+      "category": "painting",
+      "title": "山水",
+      "imagePath": "/paintings/游天云 山水 68 X 68.jpg",
+      "description": "",
+      "artist": "游天云",
+      "dimensions": "68cm x 68cm"
+    },
+    {
+      "id": "pizhizhong-shanshui",
+      "category": "painting",
+      "title": "山水",
+      "imagePath": "/paintings/皮志忠 山水 138 X 68.jpg",
+      "description": "",
+      "artist": "皮志忠",
+      "dimensions": "138cm x 68cm"
+    },
+    {
+      "id": "shiquan-huahui",
+      "category": "painting",
+      "title": "花卉",
+      "imagePath": "/paintings/石泉 花卉 68 X 68.jpg",
+      "description": "",
+      "artist": "石泉",
+      "dimensions": "68cm x 68cm"
+    },
+    {
+      "id": "luozhiwei-guoxiyuan-shanshui",
+      "category": "painting",
+      "title": "山水(合作)",
+      "imagePath": "/paintings/罗志伟郭西元合作 山水 68 x 68.jpg",
+      "description": "",
+      "artist": "罗志伟/郭西元",
+      "dimensions": "68cm x 68cm"
+    },
+    {
+      "id": "yuanwu-renwu",
+      "category": "painting",
+      "title": "人物",
+      "imagePath": "/paintings/袁武 人物 68 X 68.jpg",
+      "description": "",
+      "artist": "袁武",
+      "dimensions": "68cm x 68cm"
+    },
+    {
+      "id": "xiexiaoshi-meihua",
+      "category": "painting",
+      "title": "梅花",
+      "imagePath": "/paintings/谢硝石 梅花 138 X 68.jpg",
+      "description": "",
+      "artist": "谢硝石",
+      "dimensions": "138cm x 68cm"
+    },
+    {
+      "id": "tanzhengrong-shanshui-1",
+      "category": "painting",
+      "title": "山水",
+      "imagePath": "/paintings/谭峥嵘 山水 138 X 68.jpg",
+      "description": "",
+      "artist": "谭峥嵘",
+      "dimensions": "138cm x 68cm"
+    },
+    {
+      "id": "tanzhengrong-shanshui-2",
+      "category": "painting",
+      "title": "山水",
+      "imagePath": "/paintings/谭峥嵘 山水 68 X 68.jpg",
+      "description": "",
+      "artist": "谭峥嵘",
+      "dimensions": "68cm x 68cm"
+    },
+    {
+      "id": "tanzhengrong-shanshui-3",
+      "category": "painting",
+      "title": "山水2",
+      "imagePath": "/paintings/谭峥嵘 山水2 138 X 68.jpg",
+      "description": "",
+      "artist": "谭峥嵘",
+      "dimensions": "138cm x 68cm"
+    },
+    {
+      "id": "tanzhengrong-shanshui-4",
+      "category": "painting",
+      "title": "山水3",
+      "imagePath": "/paintings/谭峥嵘 山水3 138 X 68.jpg",
+      "description": "",
+      "artist": "谭峥嵘",
+      "dimensions": "138cm x 68cm"
+    },
+    {
+      "id": "tanzhengrong-shanshui-5",
+      "category": "painting",
+      "title": "山水4",
+      "imagePath": "/paintings/谭峥嵘 山水4 138 X 68.jpg",
+      "description": "",
+      "artist": "谭峥嵘",
+      "dimensions": "138cm x 68cm"
+    },
+    {
+      "id": "chentianran-shanshui",
+      "category": "painting",
+      "title": "山水",
+      "imagePath": "/paintings/陈天然 山水 180 X 96.jpg",
+      "description": "",
+      "artist": "陈天然",
+      "dimensions": "180cm x 96cm"
     }
   ],
   "life": [
