@@ -36,6 +36,7 @@ export function GallerySection({ showHeader = true, initialData }: { showHeader?
     const [searchQuery, setSearchQuery] = useState('');
     const [dimensionFilter, setDimensionFilter] = useState('');
     const [subCategoryFilter, setSubCategoryFilter] = useState(''); // New: For custom categories under "Other"
+    const [authorFilter, setAuthorFilter] = useState(''); // New: Filter by artist name
 
     // Ref for infinite scroll
     const bottomRef = useRef<HTMLDivElement>(null);
@@ -58,6 +59,18 @@ export function GallerySection({ showHeader = true, initialData }: { showHeader?
 
         const dims = new Set(items.map(item => item.dimensions).filter(Boolean));
         return Array.from(dims).sort();
+    }, [activeCategory, galleryData, customCategoryKeys]);
+
+    // Get available artists for current category
+    const availableArtists = useMemo(() => {
+        let items: GalleryItem[] = [];
+        if (activeCategory === 'other') {
+            items = customCategoryKeys.flatMap(key => galleryData[key] || []);
+        } else {
+            items = galleryData[activeCategory] || [];
+        }
+        const artists = new Set(items.map(item => item.artist).filter(Boolean));
+        return Array.from(artists).sort();
     }, [activeCategory, galleryData, customCategoryKeys]);
 
     // Filter items based on category, search query, and dimensions
@@ -95,6 +108,11 @@ export function GallerySection({ showHeader = true, initialData }: { showHeader?
             items = items.filter(item => item.dimensions === dimensionFilter);
         }
 
+        // Author Filter
+        if (authorFilter) {
+            items = items.filter(item => item.artist === authorFilter);
+        }
+
         return items;
     };
 
@@ -108,12 +126,13 @@ export function GallerySection({ showHeader = true, initialData }: { showHeader?
         setPage(1);
         setHasMore(filtered.length > initialSize);
         setIsLoading(false);
-    }, [activeCategory, searchQuery, dimensionFilter, subCategoryFilter]);
+    }, [activeCategory, searchQuery, dimensionFilter, subCategoryFilter, authorFilter]);
 
     // Reset filters when category changes
     useEffect(() => {
         setDimensionFilter('');
         setSubCategoryFilter('');
+        setAuthorFilter('');
     }, [activeCategory]);
 
     // Load More Handler
@@ -248,6 +267,26 @@ export function GallerySection({ showHeader = true, initialData }: { showHeader?
                                 <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none group-hover:text-gray-600 transition-colors" />
                             </div>
                         </div>
+
+                        {/* Author Filter */}
+                        {availableArtists.length > 1 && (
+                            <div className="relative w-full md:w-48 group">
+                                <div className="relative">
+                                    <select
+                                        value={authorFilter}
+                                        onChange={(e) => setAuthorFilter(e.target.value)}
+                                        className="w-full appearance-none pl-10 pr-8 py-2 border border-gray-200 rounded-full bg-white focus:outline-none focus:ring-2 focus:ring-ink-black/20 font-serif cursor-pointer hover:border-gray-300 transition-colors"
+                                    >
+                                        <option value="">所有作者</option>
+                                        {availableArtists.map((artist: unknown) => (
+                                            <option key={String(artist)} value={String(artist)}>{String(artist)}</option>
+                                        ))}
+                                    </select>
+                                    <Filter className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                                    <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none group-hover:text-gray-600 transition-colors" />
+                                </div>
+                            </div>
+                        )}
 
                     </div>
                 </div>

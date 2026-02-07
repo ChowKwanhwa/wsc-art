@@ -328,6 +328,42 @@
       "description": "",
       "artist": "巫师传",
       "dimensions": "68cm x 68cm"
+    },
+    {
+      "id": "fengmu-shanshui-1",
+      "category": "painting",
+      "title": "山水",
+      "imagePath": "/paintings/冯牧 山水 138 X 68.jpg",
+      "description": "",
+      "artist": "冯牧",
+      "dimensions": "138cm x 68cm"
+    },
+    {
+      "id": "fengmu-shanshui-2",
+      "category": "painting",
+      "title": "山水2",
+      "imagePath": "/paintings/冯牧 山水2 138 X 68.jpg",
+      "description": "",
+      "artist": "冯牧",
+      "dimensions": "138cm x 68cm"
+    },
+    {
+      "id": "fengmu-shanshui-3",
+      "category": "painting",
+      "title": "山水3",
+      "imagePath": "/paintings/冯牧 山水3 138 X 68.jpg",
+      "description": "",
+      "artist": "冯牧",
+      "dimensions": "138cm x 68cm"
+    },
+    {
+      "id": "fengmu-shanshui-4",
+      "category": "painting",
+      "title": "山水4",
+      "imagePath": "/paintings/冯牧 山水4 138 X 68.jpg",
+      "description": "",
+      "artist": "冯牧",
+      "dimensions": "138cm x 68cm"
     }
   ],
   "life": [
@@ -510,6 +546,29 @@
       "description": "",
       "artist": "巫师传",
       "dimensions": "100cm x 50cm"
+    }
+  ],
+  "烟酒": [
+    {
+      "id": "1770181182396",
+      "category": "烟酒",
+      "title": "烟酒收藏",
+      "imagePath": "/uploads/gallery/1770181182396_0_hero-bg-building.jpeg",
+      "images": [
+        "/uploads/gallery/1770181182396_0_hero-bg-building.jpeg",
+        "/uploads/gallery/1770181182396_1_jilu-logo.png"
+      ],
+      "description": "无",
+      "artist": "巫师传",
+      "dimensions": "50°",
+      "purchaseLink": "无",
+      "font": "无",
+      "era": "当代",
+      "mounting": "未装裱",
+      "material": "纸本",
+      "style": "竖幅",
+      "nature": "原创",
+      "createdAt": 1770181182400
     }
   ]
 }
