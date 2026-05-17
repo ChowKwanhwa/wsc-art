@@ -2,7 +2,7 @@
 
 import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
-import { useState, useEffect, useRef, useMemo } from 'react';
+import { useState, useEffect, useRef, useMemo, useDeferredValue } from 'react';
 import { Search, Loader2, ChevronDown, ChevronLeft, ChevronRight, X, Filter } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import { GalleryItem, GalleryData } from '@/types/gallery';
@@ -34,6 +34,7 @@ export function GallerySection({ showHeader = true, initialData }: { showHeader?
     const [selectedImage, setSelectedImage] = useState<GalleryItem | null>(null);
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
     const [searchQuery, setSearchQuery] = useState('');
+    const deferredQuery = useDeferredValue(searchQuery);
     const [dimensionFilter, setDimensionFilter] = useState('');
     const [subCategoryFilter, setSubCategoryFilter] = useState(''); // New: For custom categories under "Other"
     const [authorFilter, setAuthorFilter] = useState(''); // New: Filter by artist name
@@ -73,12 +74,10 @@ export function GallerySection({ showHeader = true, initialData }: { showHeader?
         return Array.from(artists).sort();
     }, [activeCategory, galleryData, customCategoryKeys]);
 
-    // Filter items based on category, search query, and dimensions
-    const getFilteredItems = () => {
+    const filteredItems = useMemo(() => {
         let items: GalleryItem[] = [];
 
-        if (searchQuery) {
-            // 跨分类搜索:有搜索词时忽略当前分类,聚合所有分类
+        if (deferredQuery) {
             items = Object.values(galleryData).flat();
         } else if (activeCategory === 'other') {
             if (subCategoryFilter) {
@@ -92,8 +91,8 @@ export function GallerySection({ showHeader = true, initialData }: { showHeader?
 
         items = items.filter(item => item.imagePath);
 
-        if (searchQuery) {
-            const query = searchQuery.toLowerCase();
+        if (deferredQuery) {
+            const query = deferredQuery.toLowerCase();
             items = items.filter(item =>
                 item.title.toLowerCase().includes(query) ||
                 (item.description && item.description.toLowerCase().includes(query)) ||
@@ -110,19 +109,17 @@ export function GallerySection({ showHeader = true, initialData }: { showHeader?
         }
 
         return items;
-    };
+    }, [activeCategory, deferredQuery, dimensionFilter, subCategoryFilter, authorFilter, galleryData, customCategoryKeys]);
 
-    // Reset logic when category, search, or filter changes
     useEffect(() => {
-        const filtered = getFilteredItems();
         const isMobile = window.innerWidth < 768;
         const initialSize = isMobile ? ITEMS_PER_PAGE_MOBILE * 2 : ITEMS_PER_PAGE_DESKTOP;
 
-        setVisibleItems(filtered.slice(0, initialSize));
+        setVisibleItems(filteredItems.slice(0, initialSize));
         setPage(1);
-        setHasMore(filtered.length > initialSize);
+        setHasMore(filteredItems.length > initialSize);
         setIsLoading(false);
-    }, [activeCategory, searchQuery, dimensionFilter, subCategoryFilter, authorFilter]);
+    }, [filteredItems]);
 
     // Reset filters when category changes
     useEffect(() => {
@@ -139,16 +136,15 @@ export function GallerySection({ showHeader = true, initialData }: { showHeader?
         // Simulate network delay
         await new Promise(resolve => setTimeout(resolve, 600));
 
-        const filtered = getFilteredItems();
         const isMobile = window.innerWidth < 768;
         const pageSize = isMobile ? ITEMS_PER_PAGE_MOBILE : ITEMS_PER_PAGE_DESKTOP;
         const nextPage = page + 1;
 
-        const nextItems = filtered.slice(0, (visibleItems.length + pageSize));
+        const nextItems = filteredItems.slice(0, (visibleItems.length + pageSize));
 
         setVisibleItems(nextItems);
         setPage(nextPage);
-        setHasMore(filtered.length > nextItems.length);
+        setHasMore(filteredItems.length > nextItems.length);
         setIsLoading(false);
     };
 
@@ -289,15 +285,14 @@ export function GallerySection({ showHeader = true, initialData }: { showHeader?
 
                 {/* Grid */}
                 <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6">
-                    <AnimatePresence mode="popLayout">
+                    <AnimatePresence initial={false}>
                         {visibleItems.map((item, index) => (
                             <motion.div
                                 key={`${item.id}-${index}`}
-                                layout
                                 initial={{ opacity: 0, y: 20 }}
                                 animate={{ opacity: 1, y: 0 }}
-                                exit={{ opacity: 0, scale: 0.9 }}
-                                transition={{ duration: 0.4 }}
+                                exit={{ opacity: 0 }}
+                                transition={{ duration: 0.25 }}
                                 className="group cursor-pointer flex flex-col gap-3"
                                 onClick={() => {
                                     setSelectedImage(item);
