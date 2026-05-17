@@ -74,41 +74,37 @@ export function GallerySection({ showHeader = true, initialData }: { showHeader?
     }, [activeCategory, galleryData, customCategoryKeys]);
 
     // Filter items based on category, search query, and dimensions
-    // Filter items based on category, search query, and dimensions
     const getFilteredItems = () => {
         let items: GalleryItem[] = [];
 
-        if (activeCategory === 'other') {
+        if (searchQuery) {
+            // 跨分类搜索:有搜索词时忽略当前分类,聚合所有分类
+            items = Object.values(galleryData).flat();
+        } else if (activeCategory === 'other') {
             if (subCategoryFilter) {
-                // Show specific custom category
                 items = galleryData[subCategoryFilter] || [];
             } else {
-                // Show ALL custom categories
                 items = customCategoryKeys.flatMap(key => galleryData[key] || []);
             }
         } else {
-            // Standard category
             items = galleryData[activeCategory] || [];
         }
 
-        // Filter out items without images
         items = items.filter(item => item.imagePath);
 
-        // Search Filter
         if (searchQuery) {
             const query = searchQuery.toLowerCase();
             items = items.filter(item =>
                 item.title.toLowerCase().includes(query) ||
-                (item.description && item.description.toLowerCase().includes(query))
+                (item.description && item.description.toLowerCase().includes(query)) ||
+                (item.artist && item.artist.toLowerCase().includes(query))
             );
         }
 
-        // Dimension Filter
         if (dimensionFilter) {
             items = items.filter(item => item.dimensions === dimensionFilter);
         }
 
-        // Author Filter
         if (authorFilter) {
             items = items.filter(item => item.artist === authorFilter);
         }
@@ -242,7 +238,7 @@ export function GallerySection({ showHeader = true, initialData }: { showHeader?
                         <div className="relative w-full md:w-64">
                             <input
                                 type="text"
-                                placeholder="搜索作品..."
+                                placeholder="搜索作品/作者(跨分类)..."
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
                                 className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-full focus:outline-none focus:ring-2 focus:ring-ink-black/20 font-serif"
